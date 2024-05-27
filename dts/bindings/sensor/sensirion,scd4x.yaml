@@ -1,0 +1,5 @@
+description: SCD4X CO2 sensor
+
+compatible: "sensirion,scd4x"
+
+include: [sensor-device.yaml, i2c-device.yaml]

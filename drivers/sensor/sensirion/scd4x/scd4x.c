@@ -92,6 +92,11 @@ static int scd4x_init(const struct device *dev)
     uint16_t data[3];
     int ret;
 
+    if (!device_is_ready(cfg->i2c.bus)) {
+        LOG_ERR("I2C bus device is not ready");
+        return -ENODEV;
+    }
+
     ret = scd4x_read_words(dev, SCD4X_CMD_GET_SERIAL_NUMBER, data, 3, 10);
     if (ret < 0) {
         LOG_ERR("Failed to read serial number (%d)", ret);

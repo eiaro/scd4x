@@ -39,26 +39,10 @@ static uint8_t scd4x_compute_crc(uint16_t value)
 static int scd4x_send_cmd(const struct device *dev, uint16_t cmd)
 {
     const struct scd4x_config *cfg = dev->config;
-    uint8_t buf[2] = { cmd >> 8, cmd & 0xff}
+    uint8_t buf[2] = { cmd >> 8, cmd & 0xff};
     int ret;
     
     ret = i2c_write_dt(&cfg->i2c, buf, 2);
-    if (ret < 0) {
-        LOG_ERR("Failed to write command 0x%04x (%d)", cmd, ret);
-    }
-
-    return ret;
-}
-
-__attribute__((deprecated))
-static int scd4x_write_cmd(const struct device *dev, uint16_t cmd)
-{
-    const struct scd4x_config *cfg = dev->config;
-    uint8_t buf[2];
-    int ret;
-
-    sys_put_be16(cmd, buf);
-    ret = i2c_write_dt(&cfg->i2c, buf, sizeof(buf));
     if (ret < 0) {
         LOG_ERR("Failed to write command 0x%04x (%d)", cmd, ret);
     }

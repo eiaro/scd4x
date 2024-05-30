@@ -36,6 +36,21 @@ static uint8_t scd4x_compute_crc(uint16_t value)
     return crc8(buf, 2, 0x31, 0xff, false);
 }
 
+static int scd4x_send_cmd(const struct device *dev, uint16_t cmd)
+{
+    const struct scd4x_config *cfg = dev->config;
+    uint8_t buf[2] = { cmd >> 8, cmd & 0xff}
+    int ret;
+    
+    ret = i2c_write_dt(&cfg->i2c, buf, 2);
+    if (ret < 0) {
+        LOG_ERR("Failed to write command 0x%04x (%d)", cmd, ret);
+    }
+
+    return ret;
+}
+
+__attribute__((deprecated))
 static int scd4x_write_cmd(const struct device *dev, uint16_t cmd)
 {
     const struct scd4x_config *cfg = dev->config;
@@ -56,21 +71,14 @@ static int scd4x_read_words(const struct device *dev, uint16_t cmd, uint16_t *da
     const struct scd4x_config *cfg = dev->config;
 
     uint8_t buf[num_words * (2+1)];
-    uint16_t temp16;
+    uint8_t cmd_buf[2] = { cmd >> 8, cmd & 0xff };
     int ret;
 
-    ret = scd4x_write_cmd(dev, cmd);
+
+    ret = i2c_write_read_dt(&cfg->i2c, cmd_buf, sizeof(cmd_buf), buf, sizeof(buf));    
     if (ret < 0) {
         LOG_ERR("Failed to write command 0x%04x (%d)", cmd, ret);
         return -EIO;
-    }
-
-    k_sleep(K_MSEC(delay_ms));
-    
-    ret = i2c_read_dt(&cfg->i2c, buf, sizeof(buf));
-    if (ret < 0) {
-        LOG_ERR("Failed to read data (%d)", ret);
-        return ret;
     }
 
     for (int i = 0; i < sizeof(buf); i += (2+1)) {

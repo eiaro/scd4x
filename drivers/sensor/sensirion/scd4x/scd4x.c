@@ -82,7 +82,7 @@ static int scd4x_read_words(const struct device *dev, uint16_t cmd, uint16_t *da
     }
 
     for (int i = 0; i < sizeof(buf); i += (2+1)) {
-        temp16 = sys_get_be16(&buf[i]);
+        uint16_t temp16 = sys_get_be16(&buf[i]);
         if (scd4x_compute_crc(temp16) != buf[i+2]) {
             LOG_ERR("CRC mismatch");
             return -EIO;

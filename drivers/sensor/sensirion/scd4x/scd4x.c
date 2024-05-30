@@ -134,7 +134,7 @@ static int scd4x_sample_fetch(const struct device *dev, enum sensor_channel chan
     struct scd4x_data *data = dev->data;
     //uint16_t data[3];    
 
-    if (scd4x_write_cmd(dev, SCD4X_CMD_START_PERIODIC_MEASUREMENT) < 0) {
+    if (scd4x_send_cmd(dev, SCD4X_CMD_START_PERIODIC_MEASUREMENT) < 0) {
         LOG_ERR("Failed to start periodic measurement");
         return -EIO;
     }
@@ -148,7 +148,7 @@ static int scd4x_sample_fetch(const struct device *dev, enum sensor_channel chan
         //data->sample.humidity = data[0];
     }
 
-    if (scd4x_write_cmd(dev, SCD4X_CMD_STOP_PERIODIC_MEASUREMENT) < 0) {
+    if (scd4x_send_cmd(dev, SCD4X_CMD_STOP_PERIODIC_MEASUREMENT) < 0) {
         LOG_ERR("Failed to stop periodic measurement");
         return -EIO;
     }    

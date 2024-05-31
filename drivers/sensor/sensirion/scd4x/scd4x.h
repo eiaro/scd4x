@@ -7,6 +7,26 @@
 #include <zephyr/drivers/i2c.h>
 #include <zephyr/drivers/gpio.h>
 
+#define SCD4X_OK 0
+#define SCD4X_ERR_BASE -100
+#define SCD4X_ERR_I2C_INIT (SCD4X_ERR_BASE - 1)
+#define SCD4X_ERR_I2C_READ (SCD4X_ERR_BASE - 2)
+#define SCD4X_ERR_I2C_WRITE (SCD4X_ERR_BASE - 3)
+#define SCD4X_ERR_CRC (SCD4X_ERR_BASE - 4)
+
+#define CRC_ERROR 1
+#define I2C_BUS_ERROR 2
+#define I2C_NACK_ERROR 3
+#define BYTE_NUM_ERROR 4
+
+#define CRC8_POLYNOMIAL 0x31
+#define CRC8_INIT 0xFF
+#define CRC8_LEN 1
+
+#define SENSIRION_COMMAND_SIZE 2
+#define SENSIRION_WORD_SIZE 2
+#define SENSIRION_NUM_WORDS(x) (sizeof(x) / SENSIRION_WORD_SIZE)
+#define SENSIRION_MAX_BUFFER_WORDS 32
 
 #define SCD4X_I2C_ADDR 0x62
 
@@ -63,7 +83,22 @@ struct scd4x_config {
 
 struct scd4x_data {  
     struct scd4x_sample sample;
+    uint16_t serial_number[3];
 };
 
+// ****************************************************************************
+// Function prototypes
+// ****************************************************************************
+static uint8_t scd4x_compute_crc(uint16_t value);
+
+static int scd4x_send_cmd(const struct device *dev, uint16_t cmd);
+static int scd4x_read_register(const struct device *dev, uint16_t reg, uint16_t *data, size_t data_len);
+
+static int scd4x_get_serial_number(const struct device *dev);
+static int scd4x_wake_up(const struct device *dev);
+static int scd4x_stop_periodic_measurement(const struct device *dev);
+static int scd4x_reinit(const struct device *dev);
+static int scd4x_start_periodic_measurement(const struct device *dev);
+static int scd4x_get_data_ready_status(const struct device *dev);
 
 #endif // SCD4X_H

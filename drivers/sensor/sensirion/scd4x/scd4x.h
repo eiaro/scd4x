@@ -71,6 +71,12 @@
 
 #define SCD4X_MAX_READ_LENGTH 9
 
+enum scd4x_sensor_type {
+    SCD4X_SENSOR_TYPE_AUTO = 0x00,
+    SCD4X_SENSOR_TYPE_SCD40 = 0x01,
+    SCD4X_SENSOR_TYPE_SCD41 = 0x02,
+};
+
 struct scd4x_sample {
     uint16_t co2;
     uint16_t temperature;
@@ -78,7 +84,8 @@ struct scd4x_sample {
 } __packed __aligned(2);
 
 struct scd4x_config {
-    const struct i2c_dt_spec i2c;    
+    const struct i2c_dt_spec i2c;   
+    enum scd4x_sensor_type sensor_type; 
 };
 
 struct scd4x_data {  

@@ -138,6 +138,15 @@ static int scd4x_start_periodic_measurement(const struct device *dev)
     return SCD4X_OK;
 }
 
+static int scd4x_start_low_power_periodic_measurement(const struct device *dev)
+{
+    LOG_DBG("Starting low power periodic measurement");
+    (void)scd4x_send_cmd(dev, SCD4X_CMD_START_LOW_POWER_PERIODIC_MEASUREMENT);
+    k_sleep(K_MSEC(100));
+
+    return SCD4X_OK;
+}
+
 static int scd4x_get_data_ready_status(const struct device *dev)
 {
     LOG_DBG("Getting data ready status");

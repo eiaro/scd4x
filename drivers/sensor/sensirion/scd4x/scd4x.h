@@ -104,6 +104,7 @@ static int scd4x_read_register(const struct device *dev, uint16_t reg, uint16_t 
 static int scd4x_get_serial_number(const struct device *dev);
 static int scd4x_wake_up(const struct device *dev);
 static int scd4x_stop_periodic_measurement(const struct device *dev);
+static int scd4x_start_low_power_periodic_measurement(const struct device *dev);
 static int scd4x_reinit(const struct device *dev);
 static int scd4x_start_periodic_measurement(const struct device *dev);
 static int scd4x_get_data_ready_status(const struct device *dev);

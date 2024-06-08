@@ -89,8 +89,7 @@ static int scd4x_read_register(const struct device *dev, uint16_t reg, uint16_t 
 
 static int scd4x_get_serial_number(const struct device *dev)
 {
-    LOG_DBG("Getting serial number");
-    const struct scd4x_config *cfg = dev->config;
+    LOG_DBG("Getting serial number");    
     struct scd4x_data *data = dev->data;
     int ret;
 

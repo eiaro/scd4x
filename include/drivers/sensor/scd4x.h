@@ -1,0 +1,7 @@
+#ifndef DRIVER_SENSOR_SCD4X_H
+#define DRIVER_SENSOR_SCD4X_H
+
+#define IT_WORKS 1
+
+
+#endif /* DRIVER_SENSOR_SCD4X_H */

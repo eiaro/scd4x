@@ -96,6 +96,7 @@ struct scd4x_data {
 // ****************************************************************************
 // Function prototypes
 // ****************************************************************************
+/*
 static uint8_t scd4x_compute_crc(uint16_t value);
 
 static int scd4x_send_cmd(const struct device *dev, uint16_t cmd);
@@ -109,5 +110,5 @@ static int scd4x_start_periodic_measurement(const struct device *dev);
 static int scd4x_start_low_power_periodic_measurement(const struct device *dev);
 static int scd4x_get_data_ready_status(const struct device *dev);
 static int scd4x_read_measurement(const struct device *dev);
-
+*/
 #endif // SCD4X_H

@@ -183,7 +183,7 @@ static int scd4x_read_measurement(const struct device *dev)
 static int scd4x_init(const struct device *dev)
 {
     LOG_DBG("Initializing sensor %s (%p) for sensor API", dev->name, dev);
-    const struct scd4x_config *cfg = dev->config;
+    struct scd4x_config *cfg = dev->config;
     struct scd4x_data *data = dev->data;
     int ret;
 
@@ -192,7 +192,13 @@ static int scd4x_init(const struct device *dev)
         return -ENODEV;
     }
 
-    (void)scd4x_wake_up(dev);                       // for SCD41 only
+    ret = scd4x_wake_up(dev);                       // for SCD41 only
+    if (ret != SCD4X_OK)
+    {
+        // The wakeup failed and if nothing else is wrong, this indicate a SCD41 sensor.
+        if (cfg->sensor_type == SCD4X_SENSOR_TYPE_AUTO)
+            cfg->sensor_type = SCD4X_SENSOR_TYPE_SCD41;
+    }
     (void)scd4x_stop_periodic_measurement(dev);     // incase sensor is in periodic measurement mode
     (void)scd4x_reinit(dev);                        // lastly we reinit the sensor
 
